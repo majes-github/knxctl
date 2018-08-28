@@ -5,7 +5,7 @@ import argparse
 from datetime import datetime
 import json
 import signal
-#import xmlrpclib
+from os import system
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 import sys
 #from xmlrpc.server import SimpleXMLRPCServer
@@ -56,8 +56,7 @@ def run_knxtool(address):
     cmd = 'knxtool groupswrite ip:{} {} {}'.format(
         knx_address, address, int(device_states[address]))
     log_action(cmd)
-    # system(cmd)
-    print(cmd)
+    system(cmd)
 
 
 @register_function
@@ -137,6 +136,7 @@ def main():
         pass
     log_fd = open(args.log_file, 'a')
     signal.signal(signal.SIGINT, handler)
+    signal.signal(signal.SIGTERM, handler)
 
     # ininiate xmlrpc service
     server = SimpleXMLRPCServer(
