@@ -4,7 +4,7 @@ import argparse
 from datetime import datetime
 import json
 import signal
-from subprocess import run
+from subprocess import run, DEVNULL
 import sys
 from xmlrpc.server import SimpleXMLRPCServer
 
@@ -59,7 +59,7 @@ def run_knxtool(address):
         '{:d}'.format(device_states[address]),
     ]
     log_action(' '.join(cmd))
-    run(cmd)
+    run(cmd, stdout=DEVNULL)
 
 
 @register_function
