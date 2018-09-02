@@ -54,7 +54,9 @@ def run_knxtool(address):
     cmd = [
         'knxtool',
         'groupswrite',
-        'ip:{} {} {}'.format(knx_address, address, int(device_states[address])),
+        'ip:{}'.format(knx_address),
+        '{}'.format(address),
+        '{:d}'.format(device_states[address]),
     ]
     log_action(' '.join(cmd))
     run(cmd)
