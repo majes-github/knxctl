@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
-import xmlrpclib
+from xmlrpc.client import ServerProxy
 
 
 def parse_arguments():
@@ -20,7 +20,7 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     url = 'http://{hostname}:{port}/'
-    proxy = xmlrpclib.ServerProxy(url.format(**args.__dict__))
+    proxy = ServerProxy(url.format(**args.__dict__))
 
     if args.action:
         if not args.address:
@@ -30,7 +30,7 @@ def main():
         # Call the remote procedure
         getattr(proxy, args.action)(args.address)
     else:
-        print proxy.get_device_states()
+        print(proxy.get_device_states())
 
 
 if __name__ == '__main__':

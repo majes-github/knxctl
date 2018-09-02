@@ -1,14 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-from __future__ import print_function
 import argparse
 from datetime import datetime
 import json
 import signal
-from os import system
-from SimpleXMLRPCServer import SimpleXMLRPCServer
+from subprocess import run
 import sys
-#from xmlrpc.server import SimpleXMLRPCServer
+from xmlrpc.server import SimpleXMLRPCServer
 
 
 knx_address = None
@@ -53,10 +51,13 @@ def log_action(message):
 
 
 def run_knxtool(address):
-    cmd = 'knxtool groupswrite ip:{} {} {}'.format(
-        knx_address, address, int(device_states[address]))
-    log_action(cmd)
-    system(cmd)
+    cmd = [
+        'knxtool',
+        'groupswrite',
+        'ip:{} {} {}'.format(knx_address, address, int(device_states[address])),
+    ]
+    log_action(' '.join(cmd))
+    run(cmd)
 
 
 @register_function
@@ -102,6 +103,14 @@ def toggle_blinds(address):
 
 @register_function
 def close_blinds(address):
+    enable_device(address)
+
+
+@register_function
+def stop_blinds(address):
+    _address = address.split('/')
+    _address[2] = str(int(_address[2]) + 1)
+    address = '/'.join(_address)
     enable_device(address)
 
 
